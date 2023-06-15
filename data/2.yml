@@ -31,8 +31,4 @@ inventory:
   - :date: 2023-06-13
     :qty: 12
   id: 4
-- !ruby/object:Item
-  name: pizza
-  inventory: []
-  id: 5
 id: 2

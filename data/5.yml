@@ -1,14 +1,16 @@
 --- !ruby/object:Inventory
-name: food
+name: test
 inventory:
 - !ruby/object:Item
-  name: cheese buns
+  name: drinks
   inventory:
-  - :date: 2026-02-28
-    :qty: 6
+  - :date: 2023-06-21
+    :qty: 3
   id: 0
 - !ruby/object:Item
   name: pizza
-  inventory: []
+  inventory:
+  - :date: 2023-08-14
+    :qty: 1
   id: 1
-id: 6
+id: 5
