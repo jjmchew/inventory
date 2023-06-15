@@ -1,0 +1,5 @@
+<h2>Are you sure you want to delete '<%= @list.name %>'?</h2>
+<p>All data will be lost - there is no undo</p>
+<form action="/list/<%= params[:list_id] %>/remove" method='post'>
+  <input class='button' type='submit' value='Delete list'>
+</form>

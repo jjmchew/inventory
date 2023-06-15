@@ -1,0 +1,9 @@
+<h2>Add New List</h2>
+
+<form class='full_width' action="<%= BASE_URL %>/list/add" method='post'>
+  <dl>
+    <dt><label for='name'>Name of new list</label></dt>
+    <dd><input type='text' id='name', name='name' value="<%= params[:name] %>" required></dd>
+  </dl>
+  <input class='button' type='submit' value='Add list'>
+</form>

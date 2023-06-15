@@ -1,0 +1,38 @@
+--- !ruby/object:Inventory
+name: Food
+inventory:
+- !ruby/object:Item
+  name: Diced tomatoes (796mL can)
+  inventory:
+  - :date: 2024-09-19
+    :qty: 2
+  id: 0
+- !ruby/object:Item
+  name: Pasta (450g bags)
+  inventory:
+  - :date: 2026-02-28
+    :qty: 1
+  id: 1
+- !ruby/object:Item
+  name: Kirkland organic tomato sauce
+  inventory:
+  - :date: 2025-09-01
+    :qty: 4
+  id: 2
+- !ruby/object:Item
+  name: Chips (bags)
+  inventory:
+  - :date: 2023-06-13
+    :qty: 4
+  id: 3
+- !ruby/object:Item
+  name: Onions
+  inventory:
+  - :date: 2023-06-13
+    :qty: 12
+  id: 4
+- !ruby/object:Item
+  name: pizza
+  inventory: []
+  id: 5
+id: 2

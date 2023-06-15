@@ -1,0 +1,7 @@
+<a class='button' href="<%= BASE_URL %>/list/add">Add new list</a>
+
+<ul>
+  <% @lists.each do |list| %>
+    <li><a href="<%= BASE_URL %>/list/<%= list.id %>"><%= list.name %></a></li>
+  <% end %>
+</ul>

@@ -1,0 +1,16 @@
+<h3>Add more '<%= @item.name %>'</h3>
+<form class='full_width' action="<%= BASE_URL %>/list/<%= params[:list_id] %>/item/<%= params[:item_id] %>/add" method='post'>
+  <dl class='ymd'>
+    <dt><label for='y'>Year</label></dt>
+    <dd><input type='number' id='y' name='y' min='1000' max='9999' value='<%= Date.today.year %>' required></dd>
+    <dt><label for='m'>Month</label></dt>
+    <dd><input type='number' id='m' name='m' min='1' max='12' value='<%= Date.today.month %>' required></dd>
+    <dt><label for='d'>Day</label></dt>
+    <dd><input type='number' id='d' name='d' min='1' max='31' value='<%= Date.today.day %>' required></dd>
+  </dl>
+  <dl>
+    <dt><label for='qty'>Qty</label></dt>
+    <dd><input type='number' id='qty' name='qty' min='1' value=1></dd>
+  </dl>
+  <input class='button' type='submit' value='Add'>
+</form>

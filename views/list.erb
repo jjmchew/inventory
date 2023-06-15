@@ -1,0 +1,36 @@
+<h2><%= @list.name %></h2>
+
+<aside>
+  <a class='button' href="<%= BASE_URL %>/">Back</a>
+  <a class='button' href="<%= BASE_URL %>/list/<%= @list.id %>/item/add">Add new item</a>
+</aside>
+
+<% if @list.size == 0 %>
+  <h3>Nothing here</h3>
+<% end %>
+<ul>
+  <% @list.each do |item| %>
+    <li>
+    <div>
+      <a class="fixed_width <%= item_class(item) %>" href="<%= BASE_URL %>/list/<%= @list.id %>/item/<%= item.id %>">
+        <%= item.name %> x <%= item.total %> 
+      </a>
+      <a class='button' href="<%= BASE_URL %>/list/<%= @list.id %>/item/<%= item.id %>/add">Add</a>
+      <% if item.total > 0%>
+        <form action="<%= BASE_URL %>/list/<%= @list.id %>/item/<%= item.id %>/use" method='post'>
+          <input class='button' type='submit' value='Use'>
+        </form>
+      <% end %>
+      <% if item.total == 0%>
+        <form action="<%= BASE_URL %>/list/<%= @list.id %>/item/<%= item.id %>/remove" method='post'>
+          <input class='button' type='submit' value='Remove from list'>
+        </form>
+      <% end %>
+    </div>
+    </li>
+  <% end %>
+</ul>
+
+<aside>
+  <a class='button' href="<%= BASE_URL %>/list/<%= @list.id %>/remove">Delete List</a>
+</aside>

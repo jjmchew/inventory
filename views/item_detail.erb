@@ -1,0 +1,10 @@
+<h2><%= @item.name %></h2>
+<ul>
+  <% @item.list.each do |obj| %>
+    <li><%= obj %></li>
+  <% end %>
+</ul>
+
+<aside>
+  <a class='button' href="<%= BASE_URL %>/list/<%= params[:list_id] %>">Back</a>
+</aside>

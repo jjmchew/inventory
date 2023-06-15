@@ -1,0 +1,86 @@
+--- !ruby/object:Inventory
+name: T&T
+inventory:
+- !ruby/object:Item
+  name: Ramen (Sapporo Ichiban)
+  inventory:
+  - :date: 2022-07-01
+    :qty: 1
+  id: 0
+- !ruby/object:Item
+  name: Ramen (black garlic oil)
+  inventory:
+  - :date: 2023-09-14
+    :qty: 3
+  id: 1
+- !ruby/object:Item
+  name: Ramen cup (oolong men beef)
+  inventory:
+  - :date: 2024-01-20
+    :qty: 1
+  id: 2
+- !ruby/object:Item
+  name: Ramen cup (oolong men seafood)
+  inventory:
+  - :date: 2023-12-08
+    :qty: 1
+  id: 3
+- !ruby/object:Item
+  name: Ramen cup (nissin sesame)
+  inventory:
+  - :date: 2023-06-19
+    :qty: 1
+  id: 4
+- !ruby/object:Item
+  name: Oyster sauce
+  inventory:
+  - :date: 2022-01-21
+    :qty: 1
+  - :date: 2023-03-31
+    :qty: 1
+  id: 5
+- !ruby/object:Item
+  name: Fish sauce (squid brand)
+  inventory:
+  - :date: 2021-01-04
+    :qty: 1
+  id: 6
+- !ruby/object:Item
+  name: Shaoxing cooking wine
+  inventory:
+  - :date: 2021-11-22
+    :qty: 2
+  id: 7
+- !ruby/object:Item
+  name: Sriracha
+  inventory:
+  - :date: 2024-10-24
+    :qty: 1
+  id: 8
+- !ruby/object:Item
+  name: Chiu Chow style chili oil
+  inventory:
+  - :date: 2023-10-22
+    :qty: 1
+  id: 9
+- !ruby/object:Item
+  name: Spicy mushroom sauce (jar)
+  inventory:
+  - :date: 2023-06-27
+    :qty: 1
+  id: 10
+- !ruby/object:Item
+  name: Soy sauce (amoy 1st extract reduced)
+  inventory:
+  - :date: 2024-04-27
+    :qty: 4
+  - :date: 2024-09-14
+    :qty: 1
+  id: 11
+- !ruby/object:Item
+  name: Egg noodles
+  inventory:
+  - :date: 2024-04-17
+    :qty: 2
+  id: 12
+id: 1

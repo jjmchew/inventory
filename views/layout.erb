@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Inventory</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="<%== BASE_URL %>/css-reset.css">
+    <link rel="stylesheet" href="<%== BASE_URL %>/app.css">
+    <link rel="icon" href="<%== BASE_URL %>/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <header>
+      <h1>Inventory</h1>
+    </header>
+
+    <% if session[:message] %>
+      <div class="flash_message">
+        <p><%= session.delete(:message) %></p>
+      </div>
+    <% end %>
+
+    <main>
+      <%== yield %>
+    </main>
+  </body>
+</html>

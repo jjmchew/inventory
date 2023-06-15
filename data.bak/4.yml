@@ -1,0 +1,22 @@
+--- !ruby/object:Inventory
+name: Misc
+inventory:
+- !ruby/object:Item
+  name: Bounty paper towels
+  inventory:
+  - :date: 2023-06-13
+    :qty: 16
+  id: 0
+- !ruby/object:Item
+  name: Toilet paper rolls
+  inventory:
+  - :date: 2023-06-13
+    :qty: 36
+  id: 1
+- !ruby/object:Item
+  name: Kleenex boxes
+  inventory:
+  - :date: 2023-06-13
+    :qty: 8
+  id: 2
+id: 4
