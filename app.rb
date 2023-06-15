@@ -220,7 +220,7 @@ Things to practice:
 X - conditional classes - highlight things near / past expiry
 X - data validation - good practice
 X - rubocop - clean up code
-- set-up remote repository as a git repository?
+X - set-up remote repository as a git repository?
 - simple user login?
 X - create application tests
 
