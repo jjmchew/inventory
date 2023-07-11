@@ -9,3 +9,5 @@ I hope by having this inventory handy, the urge to buy things on sale can be bet
 - data is persisted using .yml files
 - frameworks:  sinatra / erubis / minitest - relatively light
 
+### Jul 11, 2023
+- will create a PostgreSQL db on the backend instead of .yml files
