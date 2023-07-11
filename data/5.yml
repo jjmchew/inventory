@@ -13,4 +13,10 @@ inventory:
   - :date: 2023-08-14
     :qty: 1
   id: 1
+- !ruby/object:Item
+  name: beer
+  inventory:
+  - :date: 2023-07-11
+    :qty: 4
+  id: 2
 id: 5

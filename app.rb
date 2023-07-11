@@ -1,54 +1,20 @@
 require 'sinatra'
-require 'sinatra/reloader'
 require 'tilt/erubis'
-require 'yaml'
 require 'date'
 
 require_relative 'item'
 require_relative 'inventory'
 require_relative 'date'
+require_relative 'persist_yml'
 
 MODE = 'DEV'
 BASE_URL = MODE == 'DEV' ? '' : '/inventory'
 
 include DateHelper
 
-module FileMethods
-  def data_path
-    if ENV['RACK_ENV'] == 'test'
-      File.expand_path('../test/data', __FILE__)
-    else
-      File.expand_path('../data', __FILE__)
-    end
-  end
-
-  def get_filepath(file)
-    File.join(data_path, file)
-  end
-
-  def write_yaml(inventory)
-    filename = "#{inventory.id.to_s}.yml"
-    File.write(get_filepath(filename), Psych.dump(inventory))
-  end
-
-  def read_inventories
-    pattern = File.join(data_path, "*")
-    @files = Dir.glob(pattern).map do |path|
-      Psych.load_file(path)
-    end
-    @files
-  end
-
-  def read_yaml(file)
-    filename = "#{file}.yml"
-    Psych.load_file(get_filepath(filename))
-  end
-end
-include FileMethods
-
 module MiscHelpers
   def max_id
-    lists = read_inventories
+    lists = @storage.read_inventories
     max = 0
     lists.each do |list|
       max = list.id if list.id > max
@@ -62,7 +28,7 @@ module ValidationHelpers
   def list_name_validation(name)
     msg = []
     msg << "List name cannot be blank" if name.strip.empty?
-    msg << "List name must be unique" if read_inventories.any? { |list| list.name == name.strip }
+    msg << "List name must be unique" if @storage.read_inventories.any? { |list| list.name == name.strip }
     msg
   end
 
@@ -86,9 +52,14 @@ configure do
   set :erb, escape_html: true
 end
 
+configure(:development) do
+  require 'sinatra/reloader'
+  also_reload 'persist_yml.rb'
+end
+
 helpers do
   def list
-    @list ||= read_yaml(params[:list_id]) || halt(404)
+    @list ||= @storage.get_list(params[:list_id]) || halt(404)
   end
 
   def item
@@ -100,9 +71,13 @@ helpers do
   end
 end
 
+before do
+  @storage = PersistYML.new(ENV)
+end
+
 # Index route - list of lists
 get '/' do
-  @lists = read_inventories
+  @lists = @storage.read_inventories
   erb :index
 end
 
@@ -118,7 +93,7 @@ post '/list/add' do
   if msg.empty?
     new_list = Inventory.new(params[:name])
     new_list.set_id(max_id)
-    write_yaml(new_list)
+    @storage.write_list(new_list)
 
     session[:message] = "New list '#{params[:name]}' added"
     redirect url('/')
@@ -145,7 +120,7 @@ post '/list/:list_id/item/add' do
     })
     list.add(new_item)
     new_item.set_id(list.size - 1)
-    write_yaml(@list)
+    @storage.write_list(@list)
     session[:message] = "#{params[:name]} added"
     redirect url("/list/#{params[:list_id]}")
   else
@@ -171,7 +146,7 @@ end
 post '/list/:list_id/item/:item_id/add' do
   date = Date.new(params[:y].to_i, params[:m].to_i, params[:d].to_i)
   item.add({ date: date, qty: params[:qty].to_i })
-  write_yaml(list)
+  @storage.write_list(list)
   session[:message] = "#{params[:qty].to_i} x #{item.name} added"
   redirect url("/list/#{params[:list_id]}")
 end
@@ -179,7 +154,7 @@ end
 # uses 1 of the item
 post '/list/:list_id/item/:item_id/use' do
   item.use(1)
-  write_yaml(list)
+  @storage.write_list(list)
   session[:message] = "Removed 1 '#{item.name}'"
   redirect url("/list/#{params[:list_id]}")
 end
@@ -188,7 +163,7 @@ end
 post '/list/:list_id/item/:item_id/remove' do
   item_name = item.name
   list.remove(item_name)
-  write_yaml(list)
+  @storage.write_list(list)
   session[:message] = "item '#{item_name}' removed"
   redirect url("/list/#{params[:list_id]}")
 end
@@ -208,23 +183,8 @@ end
 # remove a specific list
 post '/list/:list_id/remove' do
   list_name = list.name
-  filename = "#{params[:list_id]}.yml"
-  File.delete(get_filepath(filename))
+  @storage.remove_list(params[:list_id])
   session[:message] = "'#{list_name}' deleted"
   redirect url('/')
 end
 
-=begin
-
-Things to practice:
-X - conditional classes - highlight things near / past expiry
-X - data validation - good practice
-X - rubocop - clean up code
-X - set-up remote repository as a git repository?
-- simple user login?
-X - create application tests
-
-
-X - backup remote .yml files - will be great not to have to re-enter info
-
-=end

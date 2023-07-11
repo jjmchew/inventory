@@ -31,4 +31,10 @@ inventory:
   - :date: 2023-06-13
     :qty: 12
   id: 4
+- !ruby/object:Item
+  name: cinnamon rolls
+  inventory:
+  - :date: 2023-07-11
+    :qty: 1
+  id: 5
 id: 2
