@@ -45,7 +45,7 @@ class ItemTest < Minitest::Test
     bagels = Item.new('bagels', {date: Date.new(2023, 12, 23), qty: 6}, {date: Date.new(2023, 6, 1), qty: 6})
     bagels.add({date: Date.new(2023, 4, 1), qty: 12})
     assert_equal 24, bagels.total
-    assert_equal '2023-04-01 x12, 2023-06-01 x6, 2023-12-23 x6', bagels.to_s
+    assert_equal '2023-04-01 x 12, 2023-06-01 x 6, 2023-12-23 x 6', bagels.to_s
   end
 
   def test_use_item_no_date_qty_1
@@ -59,20 +59,20 @@ class ItemTest < Minitest::Test
     bagels = Item.new('bagels', {date: Date.new(2023, 12, 23), qty: 6}, {date: Date.new(2023, 6, 1), qty: 6})
     bagels.use(7)
     assert_equal 5, bagels.total
-    assert_equal '2023-12-23 x5', bagels.to_s
+    assert_equal '2023-12-23 x 5', bagels.to_s
   end
 
   def test_use_item_no_date_qty_less_than
     bagels = Item.new('bagels', {date: Date.new(2023, 12, 23), qty: 6}, {date: Date.new(2023, 6, 1), qty: 6})
     bagels.use(3)
     assert_equal 9, bagels.total
-    assert_equal '2023-06-01 x3, 2023-12-23 x6', bagels.to_s
+    assert_equal '2023-06-01 x 3, 2023-12-23 x 6', bagels.to_s
   end
 
   def test_list
     bagels = Item.new('bagels', {date: Date.new(2023, 12, 23), qty: 6}, {date: Date.new(2023, 6, 1), qty: 6})
-    assert_includes bagels.list, '2023-06-01 x6'
-    assert_includes bagels.list, '2023-12-23 x6'
+    assert_includes bagels.list, '2023-06-01 x 6'
+    assert_includes bagels.list, '2023-12-23 x 6'
   end
 
   def test_set_id

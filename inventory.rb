@@ -12,8 +12,8 @@ class Inventory
   def add(item)
     raise TypeError, 'Item not of correct type' if item.class != Item
     new_item = item.dup
-    id = get_item_id
-    new_item.set_id(get_item_id)
+    id = new_item.id || get_item_id
+    new_item.set_id(id)
     @inventory << new_item
   end
 

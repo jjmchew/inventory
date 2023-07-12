@@ -52,7 +52,7 @@ class Item
   def use(qty=1)
     raise ArgumentError, "tried to use more than available" if qty > total
     remaining = qty
-    
+
     loop do
       if @inventory.first[:qty] <= remaining
         remaining -= @inventory.first[:qty]

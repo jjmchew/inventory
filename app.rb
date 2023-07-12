@@ -120,7 +120,7 @@ post '/list/:list_id/item/add' do
     })
     list.add(new_item)
     new_item.set_id(list.size - 1)
-    @storage.write_list(@list)
+    @storage.write_list(list)
     session[:message] = "#{params[:name]} added"
     redirect url("/list/#{params[:list_id]}")
   else

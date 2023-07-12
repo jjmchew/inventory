@@ -14,7 +14,7 @@ class AppTest < Minitest::Test
   end
 
   def create_document(name, content='')
-    File.open(File.join(data_path, name), 'w') do |file|
+    File.open(File.join(PersistYML.new(ENV).data_path, name), 'w') do |file|
       file.write(content)
     end
   end
@@ -24,11 +24,11 @@ class AppTest < Minitest::Test
   end
 
   def setup
-    FileUtils.mkdir_p(data_path)
+    FileUtils.mkdir_p(PersistYML.new(ENV).data_path)
   end
 
   def teardown
-    FileUtils.rm_rf(data_path)
+    FileUtils.rm_rf(PersistYML.new(ENV).data_path)
   end
 
   def test_index

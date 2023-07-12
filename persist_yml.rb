@@ -5,12 +5,20 @@ class PersistYML
     @env = env
   end
 
+  def data_path
+    if @env['RACK_ENV'] == 'test'
+      File.expand_path('../test/data', __FILE__)
+    else
+      File.expand_path('../data', __FILE__)
+    end
+  end
+
   def read_inventories
     pattern = File.join(data_path, "*")
-    @files = Dir.glob(pattern).map do |path|
+    files = Dir.glob(pattern).map do |path|
       Psych.load_file(path)
     end
-    @files
+    files
   end
 
   def remove_list(list_id)
@@ -23,8 +31,8 @@ class PersistYML
     read_yaml(list_id)
   end
 
-  def write_list(list_id)
-    write_yaml(list_id)
+  def write_list(inventory)
+    write_yaml(inventory)
   end
 
   private
@@ -33,15 +41,7 @@ class PersistYML
     File.join(data_path, file)
   end
 
-  def data_path
-    if @env['RACK_ENV'] == 'test'
-      File.expand_path('../test/data', __FILE__)
-    else
-      File.expand_path('../data', __FILE__)
-    end
-  end
-
-  def read_yaml(file)
+ def read_yaml(file)
     filename = "#{file}.yml"
     Psych.load_file(get_filepath(filename))
   end

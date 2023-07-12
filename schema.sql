@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS items, items_inv, invs, invs_invs CASCADE;
+-- DROP TABLE IF EXISTS items, items_inv, invs, invs_invs CASCADE;
 
 CREATE TABLE items (
   id serial PRIMARY KEY,
@@ -7,7 +7,7 @@ CREATE TABLE items (
 
 CREATE TABLE items_inv (
   id serial PRIMARY KEY,
-  item_id integer NOT NULL REFERENCES items(id),
+  item_id integer NOT NULL REFERENCES items(id) ON DELETE CASCADE,
   item_date date DEFAULT NOW(),
   qty integer NOT NULL DEFAULT 1
 );
@@ -19,8 +19,8 @@ CREATE TABLE invs (
 
 CREATE TABLE invs_invs (
   id serial PRIMARY KEY,
-  item_id integer NOT NULL UNIQUE REFERENCES items(id),
-  inv_id integer NOT NULL REFERENCES invs(id)
+  item_id integer NOT NULL UNIQUE REFERENCES items(id) ON DELETE CASCADE,
+  inv_id integer NOT NULL REFERENCES invs(id) ON DELETE CASCADE
 );
 
 

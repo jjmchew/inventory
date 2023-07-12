@@ -11,6 +11,7 @@ GEM
     parser (3.2.2.3)
       ast (~> 2.4.1)
       racc
+    pg (1.5.3)
     racc (1.7.1)
     rack (1.6.13)
     rack-protection (1.5.5)
@@ -54,6 +55,7 @@ DEPENDENCIES
   bundler (= 1.17.3)
   erubis (= 2.7.0)
   minitest (= 5.10.3)
+  pg (= 1.5.3)
   rack-test (= 2.1.0)
   rubocop (= 1.12)
   sinatra (= 1.4.7)
