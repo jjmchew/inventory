@@ -93,7 +93,7 @@ post '/list/add' do
   if msg.empty?
     new_list = Inventory.new(params[:name])
     new_list.set_id(max_id)
-    @storage.write_list(new_list)
+    @storage.new_list(new_list)
 
     session[:message] = "New list '#{params[:name]}' added"
     redirect url('/')
@@ -118,9 +118,11 @@ post '/list/:list_id/item/add' do
       date: Date.new(params[:y].to_i, params[:m].to_i, params[:d].to_i),
       qty: params[:qty].to_i
     })
-    list.add(new_item)
+    new_list = list.add(new_item)
     new_item.set_id(list.size - 1)
-    @storage.write_list(list)
+
+    @storage.add_new_item(params[:list_id].to_i, new_item)
+
     session[:message] = "#{params[:name]} added"
     redirect url("/list/#{params[:list_id]}")
   else
@@ -145,16 +147,16 @@ end
 # add qty to existing item
 post '/list/:list_id/item/:item_id/add' do
   date = Date.new(params[:y].to_i, params[:m].to_i, params[:d].to_i)
-  item.add({ date: date, qty: params[:qty].to_i })
-  @storage.write_list(list)
+  obj = { date: date, qty: params[:qty].to_i }
+  @storage.add_qty_to_item(params[:list_id].to_i, params[:item_id].to_i, obj)
+
   session[:message] = "#{params[:qty].to_i} x #{item.name} added"
   redirect url("/list/#{params[:list_id]}")
 end
 
 # uses 1 of the item
 post '/list/:list_id/item/:item_id/use' do
-  item.use(1)
-  @storage.write_list(list)
+  @storage.use_item(params[:list_id].to_i, params[:item_id].to_i)
   session[:message] = "Removed 1 '#{item.name}'"
   redirect url("/list/#{params[:list_id]}")
 end
@@ -162,8 +164,8 @@ end
 # remove item from list
 post '/list/:list_id/item/:item_id/remove' do
   item_name = item.name
-  list.remove(item_name)
-  @storage.write_list(list)
+
+  @storage.remove_item(params[:list_id].to_i, params[:item_id].to_i)
   session[:message] = "item '#{item_name}' removed"
   redirect url("/list/#{params[:list_id]}")
 end

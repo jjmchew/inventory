@@ -59,7 +59,33 @@ class PersistPG
     GetList.new(result).list
   end
 
-  def write_list(list_id)
+  def new_list(inventory)
+    sql = <<~SQL
+    SQL
+  end
+
+  def add_new_item(list_id, new_item)
+    sql = <<~SQL
+    SQL
+  end
+
+  def add_qty_to_item(list_id, item_id, obj)
+    sql = <<~SQL
+    SQL
+  end
+
+  def use_item(list_id, item_id)
+    sql = <<~SQL
+    SQL
+  end
+
+  def remove_item(list_id, item_id)
+    sql = <<~SQL
+      DELETE FROM invs_invs
+        WHERE inv_id = $1
+        AND item_id = $2;
+    SQL
+    query(sql, list_id, item_id)
   end
 
   def close_testdb

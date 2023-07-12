@@ -31,8 +31,33 @@ class PersistYML
     read_yaml(list_id)
   end
 
-  def write_list(inventory)
+  def new_list(inventory)
     write_yaml(inventory)
+  end
+
+  def add_new_item(list_id, new_item)
+    list = get_list(list_id)
+    list.add(new_item)
+    write_yaml(list)
+  end
+
+  def add_qty_to_item(list_id, item_id, obj)
+    list = get_list(list_id)
+    list.item_id(item_id).add(obj)
+    write_yaml(list)
+  end
+
+  def use_item(list_id, item_id)
+    list = get_list(list_id)
+    list.item_id(item_id).use(1)
+    write_yaml(list)
+  end
+
+  def remove_item(list_id, item_id)
+    list = get_list(list_id)
+    item_name = list.item_id(item_id).name
+    list.remove(item_name)
+    write_yaml(list)
   end
 
   private

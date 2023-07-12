@@ -52,4 +52,14 @@ class PGTest < Minitest::Test
     assert_equal 2, list.id
     assert_equal 3, list.item('tp').id
   end
+
+  def test_remove_item
+    @db.remove_item(1, 2)
+    lists = @db.read_inventories
+
+    assert_equal 2, lists.size
+    assert_equal 1, lists.first.size
+    assert_includes lists.first.to_s, 'pasta sauce x 6'
+    refute_includes lists.first.to_s, 'chips'
+  end
 end
