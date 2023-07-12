@@ -88,9 +88,9 @@ end
 
 # Add an entirely new list
 post '/list/add' do
-  msg = list_name_validation(params[:name])
+  error_msg = list_name_validation(params[:name])
 
-  if msg.empty?
+  if error_msg.empty?
     new_list = Inventory.new(params[:name])
     new_list.set_id(max_id)
     @storage.new_list(new_list)
@@ -99,7 +99,7 @@ post '/list/add' do
     redirect url('/')
   else
     status 422
-    session[:message] = msg.join(', ')
+    session[:message] = error_msg.join(', ')
     erb :new_list
   end
 end
@@ -111,9 +111,9 @@ end
 
 # add new item to list
 post '/list/:list_id/item/add' do
-  msg = item_name_validation(list, params[:name])
+  error_msg = item_name_validation(list, params[:name])
 
-  if msg.empty?
+  if error_msg.empty?
     new_item = Item.new(params[:name], {
       date: Date.new(params[:y].to_i, params[:m].to_i, params[:d].to_i),
       qty: params[:qty].to_i
@@ -127,7 +127,7 @@ post '/list/:list_id/item/add' do
     redirect url("/list/#{params[:list_id]}")
   else
     status 422
-    session[:message] = msg.join(', ')
+    session[:message] = error_msg.join(', ')
     erb :new_item
   end
 end

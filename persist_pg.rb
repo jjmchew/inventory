@@ -50,42 +50,97 @@ class PersistPG
              item_date,
              qty
       FROM invs_invs
-      JOIN invs ON inv_id = invs.id
       JOIN items ON item_id = items.id
       JOIN items_inv ON items_inv.item_id = items.id
+      FULL JOIN invs ON inv_id = invs.id
       WHERE inv_id = $1;
     SQL
     result = query(sql, list_id)
-    GetList.new(result).list
+    if result.ntuples > 0 then GetList.new(result).list
+    else
+      result2 = query('SELECT * FROM invs WHERE id = $1;', list_id)
+      empty_list = Inventory.new(result2.field_values('name').first)
+      empty_list.set_id(result2.field_values('id').first.to_i)
+      empty_list
+    end
   end
 
   def new_list(inventory)
-    sql = <<~SQL
-    SQL
+    sql = 'INSERT INTO invs (name) VALUES ($1)'
+    query(sql, inventory.name)
   end
 
   def add_new_item(list_id, new_item)
-    sql = <<~SQL
+    sql1 = 'INSERT INTO items (name) VALUES ($1)'
+    query(sql1, new_item.name)
+
+    # get item_id
+    sql1a = 'SELECT id FROM items WHERE name = $1'
+    item_id = query(sql1a, new_item.name).field_values('id').first.to_i
+
+    sql2 = <<~SQL
+      INSERT INTO items_inv (item_id, item_date, qty) VALUES ($1, $2, $3)
     SQL
+    date = nil
+    qty = nil
+    new_item.each do |obj|
+      date = obj[:date]
+      qty = obj[:qty] || 1
+    end
+    query(sql2, item_id, date, qty)
+
+    sql3 = 'INSERT INTO invs_invs (item_id, inv_id) VALUES ($1, $2)'
+    query(sql3, item_id, list_id)
   end
 
-  def add_qty_to_item(list_id, item_id, obj)
+  def add_qty_to_item(_, item_id, obj)
     sql = <<~SQL
+      INSERT INTO items_inv (item_id, item_date, qty) VALUES
+        ($1, $2, $3);
     SQL
+    query(sql, item_id, obj[:date], obj[:qty])
   end
 
-  def use_item(list_id, item_id)
-    sql = <<~SQL
+  def use_item(_, item_id)
+    # find qty for min (by date) entry
+    sql1 = <<~SQL
+      SELECT id,
+             qty
+      FROM items_inv
+      WHERE id =
+      (SELECT id AS min_id FROM items_inv WHERE item_id = $1 ORDER BY item_date LIMIT 1);
     SQL
+    result1 = query(sql1, item_id)
+    items_inv_id = result1.field_values('id').first.to_i
+    qty = result1.field_values('qty').first.to_i
+
+    # remove / update appropriate entry
+    if qty == 1
+      # sql2 = <<~SQL
+        # DELETE FROM items_inv WHERE id = $1;
+      # SQL
+      # query(sql2, items_inv_id)
+      remove_item(_, item_id)
+    else
+      sql2 = <<~SQL
+        UPDATE items_inv SET qty = $1 WHERE id = $2;
+      SQL
+      query(sql2, qty-1, items_inv_id)
+    end
   end
 
-  def remove_item(list_id, item_id)
+  def remove_item(_, item_id)
+    # sql = <<~SQL
+      # DELETE FROM invs_invs
+        # WHERE inv_id = $1
+        # AND item_id = $2;
+    # SQL
+    # query(sql, list_id, item_id)
+
     sql = <<~SQL
-      DELETE FROM invs_invs
-        WHERE inv_id = $1
-        AND item_id = $2;
+      DELETE FROM items WHERE id = $1;
     SQL
-    query(sql, list_id, item_id)
+    query(sql, item_id)
   end
 
   def close_testdb
