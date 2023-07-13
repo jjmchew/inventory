@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS items, items_inv, invs, invs_invs CASCADE;
+-- DROP TABLE IF EXISTS items, items_inv, invs, invs_invs CASCADE;
 
 CREATE TABLE items (
   id serial PRIMARY KEY,

@@ -48,7 +48,7 @@ class Inventory
   #expose an item (by item_id) in the inventory for updates
   def item_id(num)
     idx = find_id_idx(num)
-    @inventory[idx]
+    @inventory[idx] unless idx.nil?
   end
 
   # create string output of inventory

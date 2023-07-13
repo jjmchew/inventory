@@ -1,13 +1,14 @@
 require 'sinatra'
 require 'tilt/erubis'
 require 'date'
+require 'pry'
 
 require_relative 'item'
 require_relative 'inventory'
 require_relative 'date'
-require_relative 'persist_yml'
+require_relative 'persist_pg'
 
-MODE = 'DEV'
+MODE = ENV['RACK_ENV'] == 'test' ? 'PGTEST' : 'DEV'
 BASE_URL = MODE == 'DEV' ? '' : '/inventory'
 
 include DateHelper
@@ -54,7 +55,7 @@ end
 
 configure(:development) do
   require 'sinatra/reloader'
-  also_reload 'persist_yml.rb'
+  also_reload 'persist_pg.rb'
 end
 
 helpers do
@@ -72,7 +73,11 @@ helpers do
 end
 
 before do
-  @storage = PersistYML.new(ENV)
+  @storage = PersistPG.new(MODE, logger)
+end
+
+after do
+  @storage.close_testdb if MODE == 'PGTEST'
 end
 
 # Index route - list of lists
@@ -156,8 +161,9 @@ end
 
 # uses 1 of the item
 post '/list/:list_id/item/:item_id/use' do
+  item_name = item.name
   @storage.use_item(params[:list_id].to_i, params[:item_id].to_i)
-  session[:message] = "Removed 1 '#{item.name}'"
+  session[:message] = "Removed 1 '#{item_name}'"
   redirect url("/list/#{params[:list_id]}")
 end
 

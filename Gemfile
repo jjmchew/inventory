@@ -10,3 +10,4 @@ gem "rack-test", "2.1.0"
 gem "bcrypt", '3.1.13'
 gem "rubocop", "1.12"
 gem 'pg', '1.5.3'
+gem 'pry'

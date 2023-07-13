@@ -10,12 +10,13 @@ class PersistPG
       @logger = logger
     elsif mode == 'PGTEST'
       @db = PG.connect(dbname: 'postgres')
+      # @db.exec('DROP DATABASE IF EXISTS testdb')
       @db.exec('CREATE DATABASE testdb;')
 
       @db = PG.connect(dbname: 'testdb') 
       setup_testdb
     else
-      @db = PG.connect(dbname: 'jjmchewa_inventory', uesr: 'jjmchewa_pg', password: 'db123')
+      @db = PG.connect(dbname: 'jjmchewa_inventory', user: 'jjmchewa_pg', password: 'db123')
       @logger = logger
     end
   end
@@ -120,6 +121,7 @@ class PersistPG
         # DELETE FROM items_inv WHERE id = $1;
       # SQL
       # query(sql2, items_inv_id)
+      puts "REMOVING QTY 1"
       remove_item(_, item_id)
     else
       sql2 = <<~SQL
@@ -150,7 +152,7 @@ class PersistPG
   private
 
   def setup_testdb
-    sql = File.open('schema.sql') { |file| file.read }
+    sql = File.open('./test/test_schema.sql') { |file| file.read }
     @db.exec(sql)
   end
 
