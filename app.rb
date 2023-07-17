@@ -77,7 +77,7 @@ before do
 end
 
 after do
-  @storage.close_testdb if MODE == 'PGTEST'
+  @storage.close_db
 end
 
 # Index route - list of lists

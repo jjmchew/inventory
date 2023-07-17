@@ -9,12 +9,7 @@ class PersistPG
       @db = PG.connect(dbname: 'jjmchewa_inventory')
       @logger = logger
     elsif mode == 'PGTEST'
-      @db = PG.connect(dbname: 'postgres')
-      # @db.exec('DROP DATABASE IF EXISTS testdb')
-      @db.exec('CREATE DATABASE testdb;')
-
-      @db = PG.connect(dbname: 'testdb') 
-      setup_testdb
+      @db = PG.connect(dbname: 'testdb')
     else
       @db = PG.connect(dbname: 'jjmchewa_inventory', user: 'jjmchewa_pg', password: 'db123')
       @logger = logger
@@ -27,7 +22,6 @@ class PersistPG
   end
 
   def read_inventories
-    # puts "read_inventories"
     sql = <<~SQL
       SELECT * FROM invs;
     SQL
@@ -117,10 +111,6 @@ class PersistPG
 
     # remove / update appropriate entry
     if qty == 1
-      # sql2 = <<~SQL
-        # DELETE FROM items_inv WHERE id = $1;
-      # SQL
-      # query(sql2, items_inv_id)
       puts "REMOVING QTY 1"
       remove_item(_, item_id)
     else
@@ -132,35 +122,17 @@ class PersistPG
   end
 
   def remove_item(_, item_id)
-    # sql = <<~SQL
-      # DELETE FROM invs_invs
-        # WHERE inv_id = $1
-        # AND item_id = $2;
-    # SQL
-    # query(sql, list_id, item_id)
-
     sql = <<~SQL
       DELETE FROM items WHERE id = $1;
     SQL
     query(sql, item_id)
   end
 
-  def close_testdb
-    drop_testdb
+  def close_db
+    @db.close
   end
 
   private
-
-  def setup_testdb
-    sql = File.open('./test/test_schema.sql') { |file| file.read }
-    @db.exec(sql)
-  end
-
-  def drop_testdb
-    @db.close
-    db = PG.connect(dbname: 'postgres')
-    db.exec('DROP DATABASE testdb;')
-  end
 
   def get_lists(str_ids)
     lists = []
