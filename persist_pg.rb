@@ -5,13 +5,13 @@ class PersistPG
   include DbClassHelpers
 
   def initialize(mode, logger=nil)
-    if mode == 'DEV'
-      @db = PG.connect(dbname: 'jjmchewa_inventory')
+    if mode == 'development'
+      @db = PG.connect(dbname: CONFIG[:dbname])
       @logger = logger
-    elsif mode == 'PGTEST'
+    elsif mode == 'test'
       @db = PG.connect(dbname: 'testdb')
     else
-      @db = PG.connect(dbname: 'jjmchewa_inventory', user: 'jjmchewa_pg', password: 'db123')
+      @db = PG.connect(dbname: CONFIG[:dbname], user: CONFIG[:user], password: CONFIG[:password])
       @logger = logger
     end
   end

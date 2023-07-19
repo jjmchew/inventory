@@ -2,14 +2,16 @@ require 'sinatra'
 require 'tilt/erubis'
 require 'date'
 require 'pry'
+require 'yaml'
 
 require_relative 'item'
 require_relative 'inventory'
 require_relative 'date'
 require_relative 'persist_pg'
 
-MODE = ENV['RACK_ENV'] == 'test' ? 'PGTEST' : 'DEV'
-BASE_URL = MODE == 'DEV' ? '' : '/inventory'
+CONFIG = YAML.load(File.read('localonly.yml'))
+
+BASE_URL = ENV['RACK_ENV'] == 'development' ? '' : '/inventory'
 
 include DateHelper
 
@@ -49,7 +51,7 @@ include ValidationHelpers
 
 configure do
   enable :sessions
-  set :session_secret, 'this/is/secret!'
+  set :session_secret, CONFIG[:session_secret]
   set :erb, escape_html: true
 end
 
@@ -73,7 +75,7 @@ helpers do
 end
 
 before do
-  @storage = PersistPG.new(MODE, logger)
+  @storage = PersistPG.new(ENV['RACK_ENV'], logger)
 end
 
 after do
